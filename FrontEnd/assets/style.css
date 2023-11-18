@@ -125,6 +125,26 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+
+#buttonsContainer button {
+	background-color: transparent;
+	padding-right: 26px;
+	padding-left: 26px;
+	border-width: 1px;
+	font-family: 'Work Sans';
+	border-color: #1D6154;
+	color: #1D6154;
+	cursor: pointer;
+	font-weight: 700;
+	font-size: 16px;
+	border-radius: 20px;
+	height: 37px;
+}
+
+#buttonsContainer {
+
+}
+
 .gallery {
 	width: 100%;
 	display: grid;

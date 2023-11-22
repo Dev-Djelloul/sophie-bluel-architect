@@ -28,9 +28,7 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
-body {
-	line-height: 1;
-}
+
 ol, ul {
 	list-style: none;
 }
@@ -71,11 +69,10 @@ h1{
 	color: #B1663C
 }
 
-h1 > span {
+h1 span {
 	font-family: 'Work Sans';
 	font-size:10px;
 	letter-spacing: 0.1em;
-;
 }
 
 h2{
@@ -84,27 +81,36 @@ h2{
 	font-size: 30px;
 	color: #1D6154
 }
+
 nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
 
 }
+
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
 }
 
+ul a {
+    text-decoration: none;
+}
+
 li:hover {
 	color: #B1663C;
 }
+
 #introduction {
 	display: flex;
 	align-items: center;
 }
+
 #introduction figure {
 	flex: 1
 }
+
 #introduction img {
 	display: block;
 	margin: auto;
@@ -114,6 +120,7 @@ li:hover {
 #introduction article {
 	flex: 1
 }
+
 #introduction h2 {
 	margin-bottom: 1em;
 }
@@ -121,12 +128,20 @@ li:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
 }
 
-#buttonsContainer button {
+.buttons-container {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	padding: 30px 0 50px 0;
+}
+
+.buttons-container button {
 	background-color: transparent;
 	padding-right: 26px;
 	padding-left: 26px;
@@ -141,10 +156,6 @@ li:hover {
 	height: 37px;
 }
 
-#buttonsContainer {
-
-}
-
 .gallery {
 	width: 100%;
 	display: grid;
@@ -155,19 +166,18 @@ li:hover {
 
 .gallery img {
 	width: 100%;
-
 }
+
 #contact {
 	width: 50%;
-margin: auto;
-}
-#contact > * {
+	margin: auto;
 	text-align: center;
-
 }
+
 #contact h2{
 	margin-bottom: 20px;
 }
+
 #contact form {
 	text-align: left;
 	margin-top:30px;

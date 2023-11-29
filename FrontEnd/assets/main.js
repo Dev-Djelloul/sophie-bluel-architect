@@ -1,10 +1,18 @@
 
 document.addEventListener('DOMContentLoaded', () => { // this eventlistener waits till the html document is completely loaded
 
+    const isLoggedIn = sessionStorage.getItem('token');
+
+    // If the user is logged in, show the edit mode bar
+    if (isLoggedIn) {
+        document.querySelector('.edit').style.display = 'flex';
+        document.querySelector('.buttons-container').style.display = 'none';
+    }
+
     const urlWorks = 'http://localhost:5678/api/works'
     const urlCategories = 'http://localhost:5678/api/categories'
 
-// works section
+    // WORKS SECTION
     fetch(urlWorks) // fetch method makes a request to the url and returns a promise
         .then(response => response.json())     // handles the response from fetch operation. Once the data is retrieved, the first .then is executed converting the response to .json format using response.json()
         .then(works => { // second .then handles the json data received from server. The works variable contains the parsed json data retrieved from the first .then
@@ -30,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => { // this eventlistener wait
             }
             displayWorks(works);
 
-            // categories section
+            // CATEGORIES SECTION
             fetch(urlCategories)
                 .then(response => response.json())
                 .then(categories => {
@@ -56,9 +64,9 @@ document.addEventListener('DOMContentLoaded', () => { // this eventlistener wait
                         filterButtons.appendChild(button);
                     };
                 })
-            .catch(error => {  // error handling for categories section
-                console.error('Something went wrong with filtres:', error);
-            });
+                .catch(error => {  // error handling for categories section
+                    console.error('Something went wrong with filtres:', error);
+                });
         })
         .catch(error => { // error handling for works section
             console.error('Something went wrong with works:', error);
@@ -69,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => { // this eventlistener wait
 
         for (i = 0; i < allImages.length; i++) {
             const img = allImages[i]
-            
+
             if (categoryId === 'all' || img.dataset.categoryId === categoryId.toString()) {
                 img.parentNode.style.display = 'block'; // Show images of the selected category or all images
             } else {

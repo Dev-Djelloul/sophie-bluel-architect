@@ -46,6 +46,11 @@ nav li {
 	font-size: 1.2em;
 }
 
+li img {
+	width: 22px;
+	display: flex;
+}
+
 ul a {
     text-decoration: none;
 }
@@ -59,6 +64,8 @@ li:hover {
 	margin: auto;
 	text-align: center;
 }
+
+
 
 h2{
 	font-family: 'Syne';
@@ -82,7 +89,6 @@ h2{
 #login input {
 	height: 50px;
 	font-size: 1.2em;
-	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
@@ -91,7 +97,6 @@ h2{
 }
 
 #login textarea {
-	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 

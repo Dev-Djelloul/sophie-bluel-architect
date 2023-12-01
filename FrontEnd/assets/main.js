@@ -3,10 +3,26 @@ document.addEventListener('DOMContentLoaded', () => { // this eventlistener wait
 
     const isLoggedIn = sessionStorage.getItem('token');
 
-    // If the user is logged in, show the edit mode bar
+    // if login is successful the user will be redirected to "edit mode" index.html
     if (isLoggedIn) {
         document.querySelector('.edit').style.display = 'flex';
+        document.querySelector('.modifier-text').style.display = 'flex';
         document.querySelector('.buttons-container').style.display = 'none';
+
+        // code for modal
+        const modifierText = document.querySelector('.modifier-text');
+        const modal = document.getElementById('modifierModal');
+        const closeModal = document.querySelector('.fa-xmark');
+        
+        modifierText.addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+        })
+
+        // end code for modal
     }
 
     const urlWorks = 'http://localhost:5678/api/works'

@@ -2,27 +2,70 @@
 document.addEventListener('DOMContentLoaded', () => { // this eventlistener waits till the html document is completely loaded
 
     const isLoggedIn = sessionStorage.getItem('token');
+    const loginLink = document.querySelector('a[href="./assets/login_page.html"]');
 
-    // if login is successful the user will be redirected to "edit mode" index.html
-    if (isLoggedIn) {
+
+    if (isLoggedIn) {  // if login is successful the user will be redirected to "edit mode" index.html
+        loginLink.textContent = 'Logout';
         document.querySelector('.edit').style.display = 'flex';
         document.querySelector('.modifier-text').style.display = 'flex';
         document.querySelector('.buttons-container').style.display = 'none';
 
-        // code for modal
-        const modifierText = document.querySelector('.modifier-text');
-        const modal = document.getElementById('modifierModal');
+        // code for first modal
+        const modal = document.querySelector('.modal');
+        const openModal = document.querySelector('.modifier-text');
         const closeModal = document.querySelector('.fa-xmark');
-        
-        modifierText.addEventListener('click', () => {
-            modal.style.display = 'flex';
+        const modalOverlay = document.querySelector('.modal-overlay');
+
+        loginLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            sessionStorage.removeItem('token');
+            window.location.href = 'index.html';
+        });
+
+        openModal.addEventListener('click', () => {
+            modal.style.display = 'block';
+            modalOverlay.style.display = 'block';
         });
 
         closeModal.addEventListener('click', () => {
             modal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+        });
+
+        modalOverlay.addEventListener('click', () => {
+            modalOverlay.style.display = 'none';
+            modal.style.display = 'none';
         })
 
-        // end code for modal
+        // end code for first modal
+
+        // delete images from modal
+        const urlWorks = 'http://localhost:5678/api/works'
+        fetch(urlWorks)
+        .then(response => response.json())    
+        .then(works => {
+            function displayWorksModal(works) {
+                const modalGallery = document.querySelector('#modal .modalGallery');
+
+                for (let i = 0; i < works.length; i++) {
+                    const arrayWork = works[i]
+
+                    const figure = document.createElement('figure');
+                    const img = document.createElement('img');
+                    const figcaption = document.createElement('figcaption');
+
+                    img.dataset.categoryId = arrayWork.categoryId; 
+                    img.src = arrayWork.imageUrl;
+
+                    modalGallery.appendChild(figure);
+                    figure.appendChild(img);
+                    figure.appendChild(figcaption);
+                };
+            }
+            displayWorksModal(works);
+        })
+        // end delete images from modal
     }
 
     const urlWorks = 'http://localhost:5678/api/works'
@@ -89,7 +132,14 @@ document.addEventListener('DOMContentLoaded', () => { // this eventlistener wait
         });
 
     function categoryFilter(categoryId) {
+        const allButtons = document.querySelectorAll('.buttons-container button');
         const allImages = document.querySelectorAll('#portfolio .gallery img');
+
+        allButtons.forEach(button => {
+            button.classList.remove('selected');
+        });
+
+        event.target.classList.add('selected');
 
         for (i = 0; i < allImages.length; i++) {
             const img = allImages[i]

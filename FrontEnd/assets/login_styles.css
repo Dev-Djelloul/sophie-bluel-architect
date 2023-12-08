@@ -65,7 +65,9 @@ li:hover {
 	text-align: center;
 }
 
-
+#email, .password {
+	border-color: transparent;
+}
 
 h2{
 	font-family: 'Syne';

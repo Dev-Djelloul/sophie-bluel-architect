@@ -22,7 +22,7 @@ function handleLogin(email, password) {
             window.location.href = "../index.html"; // Redirect to index.html on successful login
 
         } else {
-            displayErrorMessage('Invalid credentials. Try again.');
+            displayErrorMessage('Identifiants invalides. Veuillez réessayer');
         }
     })
 }

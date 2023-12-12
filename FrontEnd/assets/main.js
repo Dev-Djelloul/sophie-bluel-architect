@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => { // this eventlistener wait
 
         // end code for first modal
 
-        // delete images from modal
+        // structure of modal content
         const urlWorks = 'http://localhost:5678/api/works'
         fetch(urlWorks)
         .then(response => response.json())    
@@ -51,21 +51,76 @@ document.addEventListener('DOMContentLoaded', () => { // this eventlistener wait
                 for (let i = 0; i < works.length; i++) {
                     const arrayWork = works[i]
 
-                    const figure = document.createElement('figure');
+                    const modalContent = document.createElement('figure');
                     const img = document.createElement('img');
                     const figcaption = document.createElement('figcaption');
+                    const trashHolder = document.createElement('div');
+                    const trashIcon = document.createElement('i');
 
                     img.dataset.categoryId = arrayWork.categoryId; 
                     img.src = arrayWork.imageUrl;
 
-                    modalGallery.appendChild(figure);
-                    figure.appendChild(img);
-                    figure.appendChild(figcaption);
+                    modalContent.classList.add('modal-content');
+                    trashHolder.classList.add('trash-holder');
+                    trashIcon.classList.add('fa-solid', 'fa-trash-can');
+
+                    modalGallery.appendChild(modalContent);
+                    modalContent.appendChild(img);
+                    modalContent.appendChild(figcaption);
+                    modalContent.appendChild(trashHolder);
+                    trashHolder.appendChild(trashIcon);
                 };
             }
             displayWorksModal(works);
         })
-        // end delete images from modal
+        // end structure of modal content
+
+        // delete work////////////////////////////////////
+        function deleteWork(workId) {
+            const isLoggedIn = sessionStorage.getItem('token');
+            fetch(`http://localhost:5678/api/works/${workId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${isLoggedIn}`,
+                    'Accept': 'application/json',
+                    // Other necessary headers
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Deletion failed');
+                }
+            })
+            .then(data => {
+                // Handle successful deletion
+                console.log('Work deleted:', data);
+        
+                // Remove the image from the gallery
+                const galleryImages = document.querySelectorAll('#portfolio .gallery img');
+                galleryImages.forEach(image => {
+                    if (image.dataset.workId === workId.toString()) {
+                        image.parentNode.remove();
+                    }
+                });
+            })
+            .catch(error => {
+                // Handle deletion error
+                console.error('Deletion error:', error);
+                // Display error message or take appropriate action
+            });
+        }
+        
+        // Attaching event listener to trash holders for deletion
+        const trashHolders = document.querySelectorAll('.trash-holder');
+        trashHolders.forEach(trashHolder => {
+            trashHolder.addEventListener('click', () => {
+                const workId = trashHolder.previousElementSibling.dataset.workId;
+                deleteWork(workId);
+            });
+        });
+        // end delete work////////////////////////////////////////
     }
 
     const urlWorks = 'http://localhost:5678/api/works'

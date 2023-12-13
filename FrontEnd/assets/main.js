@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => { // this eventlistener wait
 
 
     if (isLoggedIn) {  // if login is successful the user will be redirected to "edit mode" index.html
-        loginLink.textContent = 'Logout';
+        loginLink.textContent = 'logout';
         document.querySelector('.edit').style.display = 'flex';
         document.querySelector('.modifier-text').style.display = 'flex';
         document.querySelector('.buttons-container').style.display = 'none';
@@ -36,9 +36,19 @@ document.addEventListener('DOMContentLoaded', () => { // this eventlistener wait
         modalOverlay.addEventListener('click', () => {
             modalOverlay.style.display = 'none';
             modal.style.display = 'none';
-        })
-
+        });
         // end code for first modal
+
+        // second modal (add works)
+            const changeModal = document.querySelector('.add-picture');
+            const addPhoto = document.querySelector('.modal-title');
+
+        if (changeModal) {
+            changeModal.addEventListener('click', () => {
+                addPhoto.textContent = 'Ajout photo';
+            });
+        }
+        // end second modal (add works)
 
         // structure of modal content
         const urlWorks = 'http://localhost:5678/api/works'
@@ -69,58 +79,39 @@ document.addEventListener('DOMContentLoaded', () => { // this eventlistener wait
                     modalContent.appendChild(figcaption);
                     modalContent.appendChild(trashHolder);
                     trashHolder.appendChild(trashIcon);
-                };
+                    // removes Work
+                    trashHolder.addEventListener('click', () => {
+                        deleteWork(arrayWork.id);
+                        modalContent.remove();
+                      });
+                    // end removes Work
+                }
             }
             displayWorksModal(works);
         })
+        .catch(error => {
+            console.error('Error fetching works:', error);
+          });
         // end structure of modal content
-
-        // delete work////////////////////////////////////
         function deleteWork(workId) {
-            const isLoggedIn = sessionStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             fetch(`http://localhost:5678/api/works/${workId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${isLoggedIn}`,
-                    'Accept': 'application/json',
-                    // Other necessary headers
+              method: 'DELETE',
+              headers: {
+                'Authorization': 'Bearer ' + token, 
+                'Content-Type': 'application/json'
+              }
+            })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error('Deletion failed');
                 }
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Deletion failed');
-                }
-            })
-            .then(data => {
-                // Handle successful deletion
-                console.log('Work deleted:', data);
-        
-                // Remove the image from the gallery
-                const galleryImages = document.querySelectorAll('#portfolio .gallery img');
-                galleryImages.forEach(image => {
-                    if (image.dataset.workId === workId.toString()) {
-                        image.parentNode.remove();
-                    }
-                });
-            })
-            .catch(error => {
-                // Handle deletion error
+              })
+              .catch(error => {
                 console.error('Deletion error:', error);
-                // Display error message or take appropriate action
-            });
-        }
-        
-        // Attaching event listener to trash holders for deletion
-        const trashHolders = document.querySelectorAll('.trash-holder');
-        trashHolders.forEach(trashHolder => {
-            trashHolder.addEventListener('click', () => {
-                const workId = trashHolder.previousElementSibling.dataset.workId;
-                deleteWork(workId);
-            });
-        });
-        // end delete work////////////////////////////////////////
+              });
+          }
+        } else {
     }
 
     const urlWorks = 'http://localhost:5678/api/works'
@@ -207,3 +198,5 @@ document.addEventListener('DOMContentLoaded', () => { // this eventlistener wait
         };
     }
 });
+
+

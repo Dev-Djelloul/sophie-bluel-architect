@@ -43,23 +43,47 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
         const leftArrowButton = document.querySelector('.fa-arrow-left');
         const modalTwo = document.querySelector('.modal-two');
         const closeModalTwo = document.querySelector('.modal-two .fa-xmark');
+        const imagePreview = document.querySelector('.image-preview');
+        const addPictureContainerDescription = document.querySelector('.add-picture-container-description');
+        const customFileUpload = document.querySelector('.custom-file-upload');
 
         openModalTwo.addEventListener('click', () => {
-            modalTwo.style.display = 'block';
+        modalTwo.style.display = 'block';
         });
 
         closeModalTwo.addEventListener('click', () => {
+            displayErrorMessage.textContent = '';
+            imagePreview.innerHTML = '';
+            form.reset();
+            addPictureContainerDescription.style.display = 'flex';
+            customFileUpload.style.display = 'flex';
+            submitButton.disabled = true;
+            submitButton.style.backgroundColor = '#A7A7A7';
             modalTwo.style.display = 'none';
             modal.style.display = 'none';
             modalOverlay.style.display = 'none';
         });
 
         modalOverlay.addEventListener('click', () => {
+            displayErrorMessage.textContent = '';
+            imagePreview.innerHTML = '';
+            form.reset();
+            addPictureContainerDescription.style.display = 'flex';
+            customFileUpload.style.display = 'flex';
+            submitButton.disabled = true;
+            submitButton.style.backgroundColor = '#A7A7A7';
             modalOverlay.style.display = 'none';
             modalTwo.style.display = 'none';
         });
 
         leftArrowButton.addEventListener('click', () => {
+            displayErrorMessage.textContent = '';
+            imagePreview.innerHTML = '';
+            form.reset();
+            addPictureContainerDescription.style.display = 'flex';
+            customFileUpload.style.display = 'flex';
+            submitButton.disabled = true;
+            submitButton.style.backgroundColor = '#A7A7A7';
             modal.style.display = 'block';
             modalTwo.style.display = 'none';
         });
@@ -104,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
                 // File size exceeds the maximum limit
                 displayErrorMessage.textContent = 'Veuillez sélectionner un fichier plus petit. (max : 4 Mo)';
                 displayErrorMessage.style.display = 'block'; // Show the error message
-                document.querySelector('.modal-line').style.display = 'none';
+                submitButton.disabled = true;
             }  
 
            else if (file) {
@@ -250,7 +274,6 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
 
                     figure.appendChild(img);
                     figure.appendChild(figcaption);
-
                     gallery.appendChild(figure);
                 }
             }
@@ -317,8 +340,6 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
     const form = document.querySelector('.modal-form-container');
 
     form.addEventListener('submit', () => {
-
-
         const token = sessionStorage.getItem('token');
         const formData = new FormData(form);
 
@@ -345,11 +366,46 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
             .then(data => {
                 console.log('API response:', data);
                 // Handle successful API response or update the DOM accordingly
+                            // Call updateGallery function after successful submission
+            updateGallery();
             })
             .catch(error => {
                 console.error('Error:', error);
                 // Handle error - display an error message or handle the error as needed
             });
     });
-
 });
+
+function updateGallery() {
+    const gallery = document.querySelector('#portfolio .gallery');
+
+    fetch('http://localhost:5678/api/works')
+        .then(response => response.json())
+        .then(works => {
+            gallery.innerHTML = ''; // Clear existing content in the gallery
+
+            works.forEach(arrayWork => {
+                const figure = document.createElement('figure');
+                figure.setAttribute('data-id', arrayWork.id);
+
+                const img = document.createElement('img');
+                const figcaption = document.createElement('figcaption');
+
+                img.dataset.categoryId = arrayWork.categoryId;
+                img.src = arrayWork.imageUrl;
+                figcaption.textContent = arrayWork.title;
+
+                figure.appendChild(img);
+                figure.appendChild(figcaption);
+                gallery.appendChild(figure);
+            });
+            console.log('Gallery updated successfully!');
+        })
+        .catch(error => {
+            console.error('Error fetching updated works:', error);
+        });
+}
+
+
+
+

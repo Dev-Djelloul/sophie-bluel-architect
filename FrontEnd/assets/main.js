@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
     const isLoggedIn = sessionStorage.getItem('token');
     const loginLink = document.querySelector('a[href="./assets/login_page.html"]');
 
-
     if (isLoggedIn) {  // if login is successful the user will be redirected to "edit mode" index.html
         loginLink.textContent = 'logout';
         document.querySelector('header').style.marginTop = '100px';
@@ -48,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
         const customFileUpload = document.querySelector('.custom-file-upload');
 
         openModalTwo.addEventListener('click', () => {
-        modalTwo.style.display = 'block';
+            modalTwo.style.display = 'block';
         });
 
         closeModalTwo.addEventListener('click', () => {
@@ -111,7 +110,6 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
         // end Fetch categories to SELECT element in the second modal   
 
         // Add a new work to the database when the form is submitted (second modal) 
-
         const fileInput = document.getElementById('work-photo');
         const displayErrorMessage = document.querySelector('.error-message');
         const MAX_FILE_SIZE_MB = 4; // Maximum file size in MB
@@ -129,11 +127,11 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
                 displayErrorMessage.textContent = 'Veuillez sélectionner un fichier plus petit. (max : 4 Mo)';
                 displayErrorMessage.style.display = 'block'; // Show the error message
                 submitButton.disabled = true;
-            }  
+            }
 
-           else if (file) {
-            displayErrorMessage.textContent = ''; // Clear the error message content
-            displayErrorMessage.style.display = 'none'; // Hide the error message
+            else if (file) {
+                displayErrorMessage.textContent = ''; // Clear the error message content
+                displayErrorMessage.style.display = 'none'; // Hide the error message
                 const reader = new FileReader(); // Create a FileReader object
                 document.querySelector('.modal-form-container label').style.display = 'none';
                 document.querySelector('.add-picture-container-description').style.display = 'none';
@@ -164,22 +162,16 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
                             submitButton.disabled = true;
                         }
                     }
-
-                    // Check inputs whenever any of the fields change
-                    [fileInput, titleInput, categoryInput].forEach(input => {
+                    [fileInput, titleInput, categoryInput].forEach(input => { // Check inputs whenever any of the fields change
                         input.addEventListener('input', checkInputs);
                     });
-
-                    // Initial check after setting the title
-                    checkInputs();
+                    checkInputs(); // Initial check after setting the title
                 });
 
                 reader.readAsDataURL(file);
             }
-        });
-        // end Add a new work to the database when the form is submitted (second modal)
-
-
+        }); // end Add a new work to the database when the form is submitted (second modal)
+        
         // structure of modal content
         const urlWorks = 'http://localhost:5678/api/works'
         fetch(urlWorks)
@@ -277,7 +269,6 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
                     gallery.appendChild(figure);
                 }
             }
-
             displayWorks(works);
 
             // CATEGORIES SECTION   
@@ -335,11 +326,10 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
         };
     }
 
-
-
     const form = document.querySelector('.modal-form-container');
 
-    form.addEventListener('submit', () => {
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
         const token = sessionStorage.getItem('token');
         const formData = new FormData(form);
 
@@ -347,34 +337,113 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + token,
-                'Accept': 'application/json', // Add Accept header as per Swagger documentation
-                // Adjust other necessary headers like Content-Type based on requirements
+                'Accept': 'application/json', // The API returns JSON
             },
             body: formData,
         })
             .then(response => {
-                if (response.status === 201) {
+                if (response.ok) {
                     return response.json();
-                } else if (response.status === 401) {
-                    throw new Error('Unauthorized'); // Handle unauthorized error
-                } else if (response.status === 400) {
-                    throw new Error('Bad Request'); // Handle bad request error
-                } else {
-                    throw new Error('Unexpected Error'); // Handle other errors
                 }
+                throw new Error('Failed to add the work'); // Throw an error for unsuccessful response
             })
             .then(data => {
                 console.log('API response:', data);
-                // Handle successful API response or update the DOM accordingly
-                            // Call updateGallery function after successful submission
-            updateGallery();
+                updateModalGallery();
+                updateGallery();
+
+                const modal = document.querySelector('.modal');
+                const modalTwo = document.querySelector('.modal-two');
+                const modalOverlay = document.querySelector('.modal-overlay');
+                const imagePreview = document.querySelector('.image-preview');
+                const addPictureContainerDescription = document.querySelector('.add-picture-container-description');
+                const customFileUpload = document.querySelector('.custom-file-upload');
+                const submitButton = document.querySelector('.submit-form-btn');
+
+                modal.style.display = 'none';
+                modalTwo.style.display = 'none';
+                modalOverlay.style.display = 'none';
+
+                imagePreview.innerHTML = '';
+                addPictureContainerDescription.style.display = 'flex';
+                customFileUpload.style.display = 'flex';
+                submitButton.disabled = true;
+                submitButton.style.backgroundColor = '#A7A7A7';
+                form.reset();
             })
-            .catch(error => {
-                console.error('Error:', error);
-                // Handle error - display an error message or handle the error as needed
-            });
     });
 });
+
+function updateModalGallery() {
+    const modalGallery = document.querySelector('#modal .modalGallery');
+
+    fetch('http://localhost:5678/api/works')
+        .then(response => response.json())
+        .then(works => {
+            modalGallery.innerHTML = ''; // Clear existing content in the modal gallery
+
+            works.forEach(arrayWork => {
+                const modalContent = document.createElement('figure');
+                const img = document.createElement('img');
+                const figcaption = document.createElement('figcaption');
+                const trashHolder = document.createElement('div');
+                const trashIcon = document.createElement('i');
+
+                img.dataset.categoryId = arrayWork.categoryId;
+                img.src = arrayWork.imageUrl;
+
+                modalContent.classList.add('modal-content');
+                trashHolder.classList.add('trash-holder');
+                trashIcon.classList.add('fa-solid', 'fa-trash-can');
+
+                modalGallery.appendChild(modalContent);
+                modalContent.appendChild(img);
+                modalContent.appendChild(figcaption);
+                modalContent.appendChild(trashHolder);
+                trashHolder.appendChild(trashIcon);
+
+                trashHolder.addEventListener('click', (event) => {
+                    event.preventDefault();
+
+                    const workId = arrayWork.id; // Retrieve the work ID associated with the trash icon clicked
+                    const token = sessionStorage.getItem('token');
+
+                    fetch(`http://localhost:5678/api/works/${workId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                // Find and remove the deleted work's HTML element from the DOM
+                                const elementToRemove = event.target.parentElement.parentElement;
+                                elementToRemove.remove();
+
+                                // Remove the corresponding element from the main gallery
+                                const mainGalleryElement = document.querySelector(`[data-id="${workId}"]`);
+                                if (mainGalleryElement) {
+                                    mainGalleryElement.remove();
+                                } else {
+                                    console.error('Element not found in the main gallery.');
+                                }
+                            } else {
+                                // Handle deletion failure (optional)
+                                console.error('Failed to delete the work');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error deleting the work:', error);
+                        });
+                });
+            });
+            console.log('Modal Gallery updated successfully!');
+        })
+        .catch(error => {
+            console.error('Error fetching updated works for modal gallery:', error);
+        });
+}
 
 function updateGallery() {
     const gallery = document.querySelector('#portfolio .gallery');
@@ -405,7 +474,3 @@ function updateGallery() {
             console.error('Error fetching updated works:', error);
         });
 }
-
-
-
-

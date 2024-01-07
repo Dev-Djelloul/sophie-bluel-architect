@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
             .then(response => response.json())
             .then(works => {
                 function displayWorksModal(works) {
-                    const modalGallery = document.querySelector('#modal .modalGallery');
+                    const modalGallery = document.querySelector('.modalGallery');
 
                     for (let i = 0; i < works.length; i++) {
                         const arrayWork = works[i]
@@ -216,9 +216,8 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
                                 .then(response => {
                                     if (response.ok) {
                                         // Find and remove the deleted work's HTML element from the DOM
-                                        const elementToRemove = event.target.parentElement.parentElement;
-                                        elementToRemove.remove();
-
+                                        const workContainer = event.target.closest('figure');
+                                        workContainer.remove();     
                                         // Remove the corresponding element from the main gallery
                                         const mainGalleryElement = document.querySelector(`[data-id="${workId}"]`);
                                         if (mainGalleryElement) {
@@ -375,7 +374,7 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
 });
 
 function updateModalGallery() {
-    const modalGallery = document.querySelector('#modal .modalGallery');
+    const modalGallery = document.querySelector('.modalGallery');
 
     fetch('http://localhost:5678/api/works')
         .then(response => response.json())
@@ -418,8 +417,8 @@ function updateModalGallery() {
                         .then(response => {
                             if (response.ok) {
                                 // Find and remove the deleted work's HTML element from the DOM
-                                const elementToRemove = event.target.parentElement.parentElement;
-                                elementToRemove.remove();
+                                const workContainer = event.target.closest('figure');
+                                workContainer.remove(); 
 
                                 // Remove the corresponding element from the main gallery
                                 const mainGalleryElement = document.querySelector(`[data-id="${workId}"]`);

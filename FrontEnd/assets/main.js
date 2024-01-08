@@ -1,8 +1,8 @@
-document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event fires when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading.
+document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event fires when the initial HTML document has been completely loaded and parsed.
     const isLoggedIn = sessionStorage.getItem('token');
     const loginLink = document.querySelector('a[href="./assets/login_page.html"]');
 
-    if (isLoggedIn) {  // if login is successful the user will be redirected to "edit mode" index.html
+    if (isLoggedIn) {  // Updates the UI elements if user is logged in
         loginLink.textContent = 'logout';
         document.querySelector('header').style.marginTop = '100px';
         document.querySelector('.edit').style.display = 'flex';
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
         document.querySelector('.buttons-container').style.display = 'none';
         document.querySelector('.modal-two').style.display = 'none';
 
-        // first modal
+        // Event listeners and functionality for the first modal
         const modal = document.querySelector('.modal');
         const openModal = document.querySelector('.modifier-text');
         const closeModal = document.querySelector('.fa-xmark');
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
             modalOverlay.style.display = 'none';
             modal.style.display = 'none';
         });
-        // end first modal
+        // end Event listeners and functionality for the first modal
 
         // second modal (add works)
         const openModalTwo = document.querySelector('.add-picture');
@@ -123,9 +123,8 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
             const file = this.files[0]; // Get the selected file
 
             if (file && file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-                // File size exceeds the maximum limit
                 displayErrorMessage.textContent = 'Veuillez sélectionner un fichier plus petit. (max : 4 Mo)';
-                displayErrorMessage.style.display = 'block'; // Show the error message
+                displayErrorMessage.style.display = 'block'; // If File size exceeds the maximum limit, it will display error message
                 submitButton.disabled = true;
             }
 
@@ -142,8 +141,7 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
                     previewImage.style.width = '130px';
                     previewImage.style.height = '170px';
 
-                    // Clear any previous previews
-                    imagePreviewContainer.innerHTML = '';
+                    imagePreviewContainer.innerHTML = ''; // Clear any previous previews
                     imagePreviewContainer.appendChild(previewImage); // Append the preview image to the container
 
                     titleInput.value = file.name.split('.').slice(0, -1).join('.');
@@ -167,11 +165,11 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
                     });
                     checkInputs(); // Initial check after setting the title
                 });
-
                 reader.readAsDataURL(file);
             }
-        }); // end Add a new work to the database when the form is submitted (second modal)
-        
+        });
+        // end Add a new work to the database when the form is submitted (second modal)
+
         // structure of modal content
         const urlWorks = 'http://localhost:5678/api/works'
         fetch(urlWorks)
@@ -217,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
                                     if (response.ok) {
                                         // Find and remove the deleted work's HTML element from the DOM
                                         const workContainer = event.target.closest('figure');
-                                        workContainer.remove();     
+                                        workContainer.remove();
                                         // Remove the corresponding element from the main gallery
                                         const mainGalleryElement = document.querySelector(`[data-id="${workId}"]`);
                                         if (mainGalleryElement) {
@@ -325,8 +323,8 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
         };
     }
 
+    // Form submission handling for adding new works
     const form = document.querySelector('.modal-form-container');
-
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         const token = sessionStorage.getItem('token');
@@ -371,8 +369,11 @@ document.addEventListener('DOMContentLoaded', () => { // DOMContentLoaded event 
                 form.reset();
             })
     });
+    // end Form submission handling for adding new works
 });
+// end DOMContentLoaded 
 
+// Function to update the modal gallery when a work is added or deleted
 function updateModalGallery() {
     const modalGallery = document.querySelector('.modalGallery');
 
@@ -418,7 +419,7 @@ function updateModalGallery() {
                             if (response.ok) {
                                 // Find and remove the deleted work's HTML element from the DOM
                                 const workContainer = event.target.closest('figure');
-                                workContainer.remove(); 
+                                workContainer.remove();
 
                                 // Remove the corresponding element from the main gallery
                                 const mainGalleryElement = document.querySelector(`[data-id="${workId}"]`);
@@ -443,7 +444,9 @@ function updateModalGallery() {
             console.error('Error fetching updated works for modal gallery:', error);
         });
 }
+// end Update the modal gallery when a work is added or deleted
 
+// Function to update the main gallery
 function updateGallery() {
     const gallery = document.querySelector('#portfolio .gallery');
 
@@ -473,3 +476,4 @@ function updateGallery() {
             console.error('Error fetching updated works:', error);
         });
 }
+// end function to update the main gallery

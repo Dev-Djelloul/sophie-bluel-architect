@@ -1,6 +1,4 @@
-# Portfolio-architecte-sophie-bluel
-
-Code du projet 6 d'integrateur web.
+# Portfolio de l'architecte Sophie Bluel
 
 ## Apercu
 

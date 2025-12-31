@@ -1,13 +1,23 @@
 # Portfolio-architecte-sophie-bluel
 
-Code du projet 6 d'intégrateur web.
+Code du projet 6 d'integrateur web.
 
-# Information pour lancer le code
+## Apercu
 
- - Lancer le backend depuis votre terminal en suivant les instruction du fichier ReadMe.
- - Si vous désirez afficher le code du backend et du frontend, faites le dans 2 instances de VSCode différentes pour éviter tout problème.
+- Frontend statique du portfolio de Sophie Bluel.
+- Backend fourni pour la gestion et l'authentification.
 
-# Login pour ajout/suppression de photos
+## Lancer le projet
 
-Email : sophie.bluel@test.tld
-Password : S0phie
+1. Lancer le backend depuis votre terminal en suivant les instructions du fichier `Backend/README.md`.
+2. Ouvrir le frontend (ce dossier) dans une autre instance de VSCode pour eviter tout probleme.
+3. Ouvrir `index.html` dans un navigateur.
+
+## Login (ajout/suppression de photos)
+
+- Email : `sophie.bluel@test.tld`
+- Password : `S0phie`
+
+## Auteur
+
+Digitalblueskye

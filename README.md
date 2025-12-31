@@ -9,9 +9,14 @@ Code du projet 6 d'integrateur web.
 
 ## Lancer le projet
 
-1. Lancer le backend depuis votre terminal en suivant les instructions du fichier `Backend/README.md`.
-2. Ouvrir le frontend (ce dossier) dans une autre instance de VSCode pour eviter tout probleme.
-3. Ouvrir `index.html` dans un navigateur.
+1. Installer les dependances a la racine :
+   - `npm install`
+2. Lancer le backend :
+   - `npm start`
+   - (ou depuis `Backend/` via `npm start`)
+3. Ouvrir le frontend :
+   - `npm run open` (ouvre `index.html`)
+   - ou ouvrir `index.html` manuellement dans le navigateur.
 
 ## Login (ajout/suppression de photos)
 

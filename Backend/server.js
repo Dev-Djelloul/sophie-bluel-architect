@@ -13,6 +13,7 @@ const normalizePort = val => {
 	return false;
 };
 const port = normalizePort(process.env.PORT ||'5678');
+const host = process.env.HOST || undefined;
 app.set('port', port);
 
 const errorHandler = error => {
@@ -44,5 +45,4 @@ server.on('listening', () => {
 	console.log('Listening on ' + bind);
 });
 
-server.listen(port);
-
+server.listen(port, host);

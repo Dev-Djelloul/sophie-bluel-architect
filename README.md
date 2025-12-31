@@ -7,12 +7,14 @@
 
 ## Lancer le projet
 
-1. Installer les dependances a la racine :
+1. Cloner le repo depuis GitHub.
+2. Ouvrir le projet dans VSCode.
+3. Installer les dependances a la racine :
    - `npm install`
-2. Lancer le backend :
+4. Lancer le backend :
    - `npm start`
    - (ou depuis `Backend/` via `npm start`)
-3. Ouvrir le frontend :
+5. Ouvrir le frontend :
    - `npm run open` (ouvre `index.html`)
    - ou ouvrir `index.html` manuellement dans le navigateur.
 

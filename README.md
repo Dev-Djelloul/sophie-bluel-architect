@@ -5,7 +5,7 @@ Code du projet 6 d'integrateur web.
 ## Apercu
 
 - Frontend statique du portfolio de Sophie Bluel.
-- Backend fourni pour la gestion et l'authentification.
+- Backend fourni pour la gestion des projets et l'authentification.
 
 ## Lancer le projet
 

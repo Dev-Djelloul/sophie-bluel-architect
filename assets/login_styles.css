@@ -1,13 +1,18 @@
 body {
-	max-width: 1140px;
+	width: min(1140px, calc(100% - 40px));
 	margin:auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 }
 
+* {
+	box-sizing: border-box;
+}
+
 header {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 	margin-top: 35px;
 }
 
@@ -39,10 +44,12 @@ nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
+	gap: 20px;
+	margin: 0;
+	padding: 0;
 }
 
 nav li {
-	padding: 0 10px;
 	font-size: 1.2em;
 }
 
@@ -60,7 +67,7 @@ li:hover {
 }
 
 #login {
-	width: 50%;
+	width: min(50%, 380px);
 	margin: auto;
 	text-align: center;
 }
@@ -130,10 +137,50 @@ footer nav ul {
 footer li {
     position: fixed;
     bottom: 0;
-    width: 100%;
+    right: 0;
     display: flex;
 	justify-content: flex-end;
 	margin: 2em;
     margin-right: 0;
     padding-right: 0;
+}
+
+@media (max-width: 640px) {
+	body {
+		width: calc(100% - 32px);
+	}
+
+	header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 20px;
+	}
+
+	h1 {
+		margin-bottom: 0;
+	}
+
+	nav ul {
+		flex-wrap: wrap;
+		gap: 12px 18px;
+	}
+
+	#login {
+		width: 100%;
+	}
+
+	#login h2 {
+		margin-top: 80px;
+	}
+
+	footer nav ul {
+		justify-content: center;
+		padding: 0;
+	}
+
+	footer li {
+		position: static;
+		justify-content: center;
+		margin: 2em 0;
+	}
 }
